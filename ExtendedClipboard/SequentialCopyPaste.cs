@@ -40,6 +40,7 @@ namespace ExtendedClipboard
 
     public bool Toggle()
     {
+      _logger.Log(Info, $"{(Active ? "Dea" : "A")}ctivating sequential copy paste...");
       if (Active)
         Stop();
       else
@@ -81,7 +82,7 @@ namespace ExtendedClipboard
       else
       {
         Clipboard.Clear();
-        _logger.Log(Info, $"Clipboard empty.");
+        _logger.Log(Info, "Clipboard empty.");
       }
       RegisterClipboardChanged();
     }
@@ -91,7 +92,7 @@ namespace ExtendedClipboard
       if (e.ContentType != ContentTypes.Text) return;
       var content = (string) e.Content;
 
-      _logger.Log(Info, $"Clipboard entry detected:{NewLine}{(string)e.Content}");
+      _logger.Log(Info, $"Clipboard entry has been added to queue:{NewLine}{(string)e.Content}");
       foreach (var line in content.Split(new[] { NewLine }, RemoveEmptyEntries))
         _cache.Enqueue(line);
     }

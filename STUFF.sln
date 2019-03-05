@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Logging", "Logging\Logging.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExtendedClipboard", "ExtendedClipboard\ExtendedClipboard.csproj", "{B4894DAD-840A-4FEE-A514-9B81C2A9305A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExtendedClipboard.Test", "ExtendedClipboard.Test\ExtendedClipboard.Test.csproj", "{5BD61A62-D34B-464F-BC7A-63E6AB51D87F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{B4894DAD-840A-4FEE-A514-9B81C2A9305A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B4894DAD-840A-4FEE-A514-9B81C2A9305A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B4894DAD-840A-4FEE-A514-9B81C2A9305A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5BD61A62-D34B-464F-BC7A-63E6AB51D87F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5BD61A62-D34B-464F-BC7A-63E6AB51D87F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5BD61A62-D34B-464F-BC7A-63E6AB51D87F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5BD61A62-D34B-464F-BC7A-63E6AB51D87F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
