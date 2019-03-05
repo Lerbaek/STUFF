@@ -1,0 +1,16 @@
+﻿<Window x:Name="Window" x:Class="STUFF.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:STUFF"
+        mc:Ignorable="d"
+        Title="Stuff's Toolbox of Utterly Fantastic Functionality" Height="450" Width="800">
+  <Grid Name="Grid">
+    <Button Name="SequentialCopyPasteButton" Content="Sequential Copy Paste" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="162" Click="SequentialCopyPasteButton_Click"/>
+    <DataGrid Name="LogDataGrid" Margin="182,10,10,10" HeadersVisibility="None" ItemsSource="{Binding Logger.Entries, ElementName=Window, Mode=OneWay}" GridLinesVisibility="None" AlternationCount="2" AlternatingRowBackground="AliceBlue">
+    </DataGrid>
+
+  </Grid>
+</Window>
+
