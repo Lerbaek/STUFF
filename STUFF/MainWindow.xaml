@@ -5,9 +5,12 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:STUFF"
         mc:Ignorable="d"
-        Title="Stuff's Toolbox of Utterly Fantastic Functionality" Height="450" Width="800">
-  <Grid Name="Grid">
-    <Button Name="SequentialCopyPasteButton" Content="Sequential Copy Paste" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="162" Click="SequentialCopyPasteButton_Click"/>
+        Title="Stuff's Toolbox of Utterly Fantastic Functionality" Height="450" Width="800" MinHeight="250" MinWidth="500">
+  <Grid>
+    <StackPanel Name="ButtonsStackPanel" HorizontalAlignment="Left" Width="182">
+      <Button Name="SequentialCopyPasteButton" Content="Sequential Copy Paste" Margin="10,10,10,0" Click="SequentialCopyPasteButton_Click"/>
+      <Button Name="TimestampRenameButton" Content="Timestamp Rename" Margin="10,10,10,0" Click="TimestampRenameButton_Click"/>
+    </StackPanel>
     <DataGrid Name="LogDataGrid" Margin="182,10,10,10" HeadersVisibility="None" ItemsSource="{Binding Logger.Entries, ElementName=Window, Mode=OneWay}" GridLinesVisibility="None" AlternationCount="2" AlternatingRowBackground="AliceBlue">
     </DataGrid>
 
