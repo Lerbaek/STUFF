@@ -26,17 +26,15 @@ namespace ExtendedClipboard
 
     public bool Active { get; private set; }
 
-    private SequentialCopyPaste(ILogger logger)
-      => _logger = logger;
+    public bool AddNewClipboardEntriesToQueue { private get; set; }
 
-    public static SequentialCopyPaste GetInstance(ILogger logger) =>
-      _instance ?? (_instance = new SequentialCopyPaste(logger));
+    private SequentialCopyPaste(ILogger logger) => _logger = logger;
 
-    private void   RegisterClipboardChanged() =>
-      _clipboard.ClipboardChanged += ClipboardChanged;
+    public static SequentialCopyPaste GetInstance(ILogger logger) => _instance ?? (_instance = new SequentialCopyPaste(logger));
 
-    private void UnregisterClipboardChanged() =>
-      _clipboard.ClipboardChanged -= ClipboardChanged;
+    private void   RegisterClipboardChanged() => _clipboard.ClipboardChanged += ClipboardChanged;
+
+    private void UnregisterClipboardChanged() => _clipboard.ClipboardChanged -= ClipboardChanged;
 
     public bool Toggle()
     {
@@ -91,10 +89,16 @@ namespace ExtendedClipboard
     {
       if (e.ContentType != ContentTypes.Text) return;
       var content = (string) e.Content;
+      var newEntries = content.Split(new[] { NewLine }, RemoveEmptyEntries);
 
-      _logger.Log(Info, $"Clipboard entry has been added to queue:{NewLine}{(string)e.Content}");
-      foreach (var line in content.Split(new[] { NewLine }, RemoveEmptyEntries))
-        _cache.Enqueue(line);
+      if(AddNewClipboardEntriesToQueue)
+        foreach (var line in newEntries)
+          _cache.Enqueue(line);
+
+      else
+        _cache = new Queue<string>(newEntries);
+
+      _logger.Log(Info, $"Clipboard entries have been {(AddNewClipboardEntriesToQueue ? "added to queue" : "set")}:{NewLine}{(string)e.Content}");
     }
   }
 }

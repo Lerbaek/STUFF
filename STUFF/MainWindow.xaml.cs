@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.ComponentModel;
@@ -7,8 +8,8 @@ using System.Windows;
 using System.Windows.Controls;
 using ExtendedClipboard;
 using Logging;
+using MediaStamp;
 using Microsoft.Win32;
-using static System.Environment;
 using static Logging.Severity;
 
 namespace STUFF
@@ -19,24 +20,21 @@ namespace STUFF
   public partial class MainWindow : Window
   {
     public ILogger Logger { get; }
-    public IEnumerable<Button> Buttons => ButtonsStackPanel.Children.OfType<Button>();
+    public IEnumerable<Button> Buttons => ButtonsDockPanel.Children.OfType<Button>();
+    public IEnumerable<StackPanel> OptionsStackPanels => OptionsGrid.Children.OfType<StackPanel>();
     public SequentialCopyPaste SequentialCopyPaste { get; }
+    public TimestampRename TimestampRename { get; }
 
     public MainWindow()
     {
       Logger = new WPFLogger();
       SequentialCopyPaste = SequentialCopyPaste.GetInstance(Logger);
+      TimestampRename = new TimestampRename(Logger);
       InitializeComponent();
       ((INotifyCollectionChanged) LogDataGrid.Items).CollectionChanged += LogDataGrid_SourceUpdated;
     }
 
-    private void SequentialCopyPasteButton_Click(object sender, RoutedEventArgs e)
-    {
-      Logger.Log(Info, "Sequential Copy Paste was clicked.");
-      SequentialCopyPaste.Toggle();
-      foreach (var button in Buttons.Where(b => !ReferenceEquals(b, sender)))
-        button.IsEnabled = !SequentialCopyPaste.Active;
-    }
+    private void SequentialCopyPasteButton_Click(object sender, RoutedEventArgs e) => ShowOptions(SequentialCopyPasteOptionsStackPanel);
 
     private void LogDataGrid_SourceUpdated(object sender, NotifyCollectionChangedEventArgs e)
     {
@@ -45,7 +43,23 @@ namespace STUFF
       LogDataGrid.ScrollIntoView(lastRowItem);
     }
 
-    private void TimestampRenameButton_Click(object sender, RoutedEventArgs e)
+    private void TimestampRenameButton_Click(object sender, RoutedEventArgs e) => ShowOptions(TimestampRenameOptionsStackPanel);
+
+    private void SetButtonStates(Button excluded, bool state, Button startButton)
+    {
+      foreach (var button in Buttons.Where(b => !ReferenceEquals(b, excluded)))
+        button.IsEnabled = state;
+      startButton.Content = state ? "Start" : "Stop";
+    }
+
+    private void ShowOptions(StackPanel optionsStackPanel)
+    {
+      foreach (var stackPanel in OptionsStackPanels.Where(b => !ReferenceEquals(b, optionsStackPanel)))
+        stackPanel.Visibility = Visibility.Collapsed;
+      optionsStackPanel.Visibility = Visibility.Visible;
+    }
+
+    private void TimestampRenameStartButton_Click(object sender, RoutedEventArgs e)
     {
       const string imageExtensions = "*.gif;*.jpg;*.jpeg;*.png;*.tif";
       const string videoExtensions = "*.3gp;*.avi;*.m4v;*.mkv;*.mp4;*.mov;*.mts;*.wmv";
@@ -53,21 +67,26 @@ namespace STUFF
       {
         Title = "Select files to rename",
         DereferenceLinks = true,
-        Filter =    "All Files|*.*" +
-                $"|Media Files|{imageExtensions};{videoExtensions}" +
-                $"|Image Files|{imageExtensions}" +
-                $"|Video Files|{videoExtensions}",
+        Filter = "All Files|*.*" +
+                 $"|Media Files|{imageExtensions};{videoExtensions}" +
+                 $"|Image Files|{imageExtensions}" +
+                 $"|Video Files|{videoExtensions}",
         FilterIndex = 2,
         Multiselect = true,
       };
-      dialog.FileOk += TimestampRenameFiles;
-      dialog.ShowDialog();
+      if (dialog.ShowDialog() == true)
+        TimestampRename.Rename(dialog.FileNames);
     }
 
-    private void TimestampRenameFiles(object sender, CancelEventArgs e)
+    private void SequentialCopyPasteStartButton_Click(object sender, RoutedEventArgs e)
     {
-      OpenFileDialog dialog = (OpenFileDialog) sender;
-      Logger.Log(Info, $"Files selected for renaming:{NewLine}{dialog.FileNames.Aggregate((c, n) => $"{c}{NewLine}{n}")}");
+      Logger.Log(Info, "Sequential Copy Paste was clicked.");
+      SequentialCopyPaste.Toggle();
+      SetButtonStates(SequentialCopyPasteButton, !SequentialCopyPaste.Active, SequentialCopyPasteStartButton);
     }
+
+    private void CheckBox_CheckChanged(object sender, RoutedEventArgs e)
+      => Logger.Log(Info,
+        $"New clipboard entries will {(AddNewToQueueCheckBox.IsChecked.Value ? "be added to" : "overwrite")} the existing queue");
   }
 }

@@ -1,19 +1,69 @@
-﻿<Window x:Name="Window" x:Class="STUFF.MainWindow"
+﻿<Window
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:STUFF"
+        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+        xmlns:xcad="http://schemas.xceed.com/wpf/xaml/avalondock" x:Name="Window" x:Class="STUFF.MainWindow"
         mc:Ignorable="d"
         Title="Stuff's Toolbox of Utterly Fantastic Functionality" Height="450" Width="800" MinHeight="250" MinWidth="500">
+  <Window.Resources>
+    <xcad:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+  </Window.Resources>
   <Grid>
-    <StackPanel Name="ButtonsStackPanel" HorizontalAlignment="Left" Width="182">
-      <Button Name="SequentialCopyPasteButton" Content="Sequential Copy Paste" Margin="10,10,10,0" Click="SequentialCopyPasteButton_Click"/>
-      <Button Name="TimestampRenameButton" Content="Timestamp Rename" Margin="10,10,10,0" Click="TimestampRenameButton_Click"/>
-    </StackPanel>
-    <DataGrid Name="LogDataGrid" Margin="182,10,10,10" HeadersVisibility="None" ItemsSource="{Binding Logger.Entries, ElementName=Window, Mode=OneWay}" GridLinesVisibility="None" AlternationCount="2" AlternatingRowBackground="AliceBlue">
-    </DataGrid>
+    <DockPanel x:Name="ButtonsDockPanel" HorizontalAlignment="Left" Width="182">
+      <Button x:Name="SequentialCopyPasteButton" DockPanel.Dock="Top" Content="Sequential Copy Paste" Margin="10,10,10,0" Click="SequentialCopyPasteButton_Click"/>
+      <Button x:Name="TimestampRenameButton" DockPanel.Dock="Top" Content="Timestamp Rename" Margin="10,10,10,0" Click="TimestampRenameButton_Click"/>
+      <GroupBox Header="Options" Margin="10,10,10,10">
+        <Grid Name="OptionsGrid">
+          <StackPanel Name="TimestampRenameOptionsStackPanel" Visibility="Collapsed">
+            <Button Name="TimestampRenameStartButton" Content="Start" Margin="10,10,10,10" Click="TimestampRenameStartButton_Click"/>
+            <GroupBox Header="Offset" Margin="10,10,10,0">
+              <xctk:TimeSpanUpDown Name="OffsetTimeSpanUpDown" Margin="10,10,10,10" Value="{Binding TimestampRename.Offset, ElementName=Window, Mode=OneWayToSource}"/>
+            </GroupBox>
+            <CheckBox Content="Dry run" Margin="10,10,10,0" IsChecked="{Binding TimestampRename.DryRun, ElementName=Window, Mode=OneWayToSource}"/>
+          </StackPanel>
+          <StackPanel Name="SequentialCopyPasteOptionsStackPanel" Visibility="Collapsed">
+            <Button Name="SequentialCopyPasteStartButton" Content="Start" Margin="10,10,10,10" Click="SequentialCopyPasteStartButton_Click"/>
+            <CheckBox Name="AddNewToQueueCheckBox" Content="Add new to queue" Margin="10,10,10,0" IsChecked="{Binding SequentialCopyPaste.AddNewClipboardEntriesToQueue, ElementName=Window, Mode=OneWayToSource}" Checked="CheckBox_CheckChanged" Unchecked="CheckBox_CheckChanged"/>
+          </StackPanel>
+        </Grid>
+      </GroupBox>
+
+    </DockPanel>
+    <DataGrid x:Name="LogDataGrid" Margin="182,10,10,10" HeadersVisibility="None" ItemsSource="{Binding Logger.Entries, ElementName=Window, Mode=OneWay}" GridLinesVisibility="None" AlternationCount="2" AlternatingRowBackground="AliceBlue"/>
 
   </Grid>
 </Window>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
