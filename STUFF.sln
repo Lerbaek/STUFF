@@ -13,6 +13,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExtendedClipboard.Test", "E
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MediaStamp", "MediaStamp\MediaStamp.csproj", "{A02F7CEF-9008-4CC7-AB4E-F7597AAEF82F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MadForFattigroeve", "MadForFattigroeve\MadForFattigroeve.csproj", "{BA822D43-C8E1-42E5-A719-AFC2F04F81BF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MadForFattigroeve.Test", "MadForFattigroeve.Test\MadForFattigroeve.Test.csproj", "{E3A4A88D-785B-4A14-B5BC-9A9E992740DD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +43,14 @@ Global
 		{A02F7CEF-9008-4CC7-AB4E-F7597AAEF82F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A02F7CEF-9008-4CC7-AB4E-F7597AAEF82F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A02F7CEF-9008-4CC7-AB4E-F7597AAEF82F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BA822D43-C8E1-42E5-A719-AFC2F04F81BF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BA822D43-C8E1-42E5-A719-AFC2F04F81BF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BA822D43-C8E1-42E5-A719-AFC2F04F81BF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BA822D43-C8E1-42E5-A719-AFC2F04F81BF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E3A4A88D-785B-4A14-B5BC-9A9E992740DD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E3A4A88D-785B-4A14-B5BC-9A9E992740DD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E3A4A88D-785B-4A14-B5BC-9A9E992740DD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E3A4A88D-785B-4A14-B5BC-9A9E992740DD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
