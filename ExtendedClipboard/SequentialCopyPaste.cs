@@ -28,7 +28,16 @@ namespace ExtendedClipboard
 
     public bool AddNewClipboardEntriesToQueue { private get; set; }
 
-    private SequentialCopyPaste(ILogger logger) => _logger = logger;
+    public bool CountPrefix { private get; set; }
+
+    private int _count = 0;
+
+    private SequentialCopyPaste(ILogger logger)
+    {
+      _logger = logger;
+      AddNewClipboardEntriesToQueue = true;
+      CountPrefix = true;
+    }
 
     public static SequentialCopyPaste GetInstance(ILogger logger) => _instance ?? (_instance = new SequentialCopyPaste(logger));
 
@@ -74,7 +83,8 @@ namespace ExtendedClipboard
       UnregisterClipboardChanged();
       if(_cache.Any())
       {
-        Clipboard.SetText(_cache.Dequeue());
+        ++_count;
+        Clipboard.SetText((CountPrefix ? $"{_count.ToString().PadLeft(2, '0')}: " : string.Empty) +  _cache.Dequeue());
         _logger.Log(Info, $"Clipboard content set to \"{Clipboard.GetText()}\".");
       }
       else
@@ -96,7 +106,10 @@ namespace ExtendedClipboard
           _cache.Enqueue(line);
 
       else
+      {
         _cache = new Queue<string>(newEntries);
+        _count = 0;
+      }
 
       _logger.Log(Info, $"Clipboard entries have been {(AddNewClipboardEntriesToQueue ? "added to queue" : "set")}:{NewLine}{(string)e.Content}");
     }

@@ -26,7 +26,8 @@
           </StackPanel>
           <StackPanel Name="SequentialCopyPasteOptionsStackPanel" Visibility="Collapsed">
             <Button Name="SequentialCopyPasteStartButton" Content="Start" Margin="10,10,10,10" Click="SequentialCopyPasteStartButton_Click"/>
-            <CheckBox Name="AddNewToQueueCheckBox" Content="Add new to queue" Margin="10,10,10,0" IsChecked="{Binding SequentialCopyPaste.AddNewClipboardEntriesToQueue, ElementName=Window, Mode=OneWayToSource}" Checked="CheckBox_CheckChanged" Unchecked="CheckBox_CheckChanged"/>
+            <CheckBox Name="AddNewToQueueCheckBox" Content="Add new to queue" Margin="10,10,10,0" IsChecked="{Binding SequentialCopyPaste.AddNewClipboardEntriesToQueue, ElementName=Window, Mode=OneWayToSource}" Checked="AddNewToQueueCheckBox_CheckChanged" Unchecked="AddNewToQueueCheckBox_CheckChanged"/>
+            <CheckBox Name="CountPrefixCheckbox" Content="Count prefix" Margin="10,10,10,0" IsChecked="{Binding SequentialCopyPaste.CountPrefix, ElementName=Window, Mode=OneWayToSource}" Checked="CountPrefixCheckBox_CheckChanged" Unchecked="CountPrefixCheckBox_CheckChanged"/>
           </StackPanel>
         </Grid>
       </GroupBox>

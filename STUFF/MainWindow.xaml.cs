@@ -45,9 +45,9 @@ namespace STUFF
 
     private void TimestampRenameButton_Click(object sender, RoutedEventArgs e) => ShowOptions(TimestampRenameOptionsStackPanel);
 
-    private void SetButtonStates(Button excluded, bool state, Button startButton)
+    private void SetButtonStates(bool state, Button startButton)
     {
-      foreach (var button in Buttons.Where(b => !ReferenceEquals(b, excluded)))
+      foreach (var button in Buttons)
         button.IsEnabled = state;
       startButton.Content = state ? "Start" : "Stop";
     }
@@ -82,11 +82,15 @@ namespace STUFF
     {
       Logger.Log(Info, "Sequential Copy Paste was clicked.");
       SequentialCopyPaste.Toggle();
-      SetButtonStates(SequentialCopyPasteButton, !SequentialCopyPaste.Active, SequentialCopyPasteStartButton);
+      SetButtonStates(!SequentialCopyPaste.Active, SequentialCopyPasteStartButton);
     }
 
-    private void CheckBox_CheckChanged(object sender, RoutedEventArgs e)
+    private void AddNewToQueueCheckBox_CheckChanged(object sender, RoutedEventArgs e)
       => Logger.Log(Info,
         $"New clipboard entries will {(AddNewToQueueCheckBox.IsChecked.Value ? "be added to" : "overwrite")} the existing queue");
+
+    private void CountPrefixCheckBox_CheckChanged(object sender, RoutedEventArgs e)
+      => Logger.Log(Info,
+        $"New clipboard entries will {(CountPrefixCheckbox.IsChecked.Value ? "" : "not ")}be prefixed with an incrementing number");
   }
 }
