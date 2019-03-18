@@ -37,6 +37,7 @@
     <Reference Include="nunit.framework, Version=3.11.0.0, Culture=neutral, PublicKeyToken=2638cd05610744eb, processorArchitecture=MSIL">
       <HintPath>..\packages\NUnit.3.11.0\lib\net45\nunit.framework.dll</HintPath>
     </Reference>
+    <Reference Include="PresentationCore" />
     <Reference Include="Rhino.Mocks, Version=3.6.0.0, Culture=neutral, PublicKeyToken=0b3305902db7183f, processorArchitecture=MSIL">
       <HintPath>..\packages\RhinoMocks.3.6.1\lib\net\Rhino.Mocks.dll</HintPath>
     </Reference>
@@ -57,6 +58,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Logging\Logging.csproj">
+      <Project>{AB3BC88D-8811-48E2-9D39-1D6C66C6D6F4}</Project>
+      <Name>Logging</Name>
+    </ProjectReference>
     <ProjectReference Include="..\MadForFattigroeve\MadForFattigroeve.csproj">
       <Project>{ba822d43-c8e1-42e5-a719-afc2f04f81bf}</Project>
       <Name>MadForFattigroeve</Name>

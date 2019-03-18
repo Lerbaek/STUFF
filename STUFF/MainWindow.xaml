@@ -15,6 +15,7 @@
     <DockPanel x:Name="ButtonsDockPanel" HorizontalAlignment="Left" Width="182">
       <Button x:Name="SequentialCopyPasteButton" DockPanel.Dock="Top" Content="Sequential Copy Paste" Margin="10,10,10,0" Click="SequentialCopyPasteButton_Click"/>
       <Button x:Name="TimestampRenameButton" DockPanel.Dock="Top" Content="Timestamp Rename" Margin="10,10,10,0" Click="TimestampRenameButton_Click"/>
+      <Button x:Name="MadForFattigroeveButton" DockPanel.Dock="Top" Content="Mad For Fattigrøve" Margin="10,10,10,0" Click="MadForFattigroeveButton_Click"/>
       <GroupBox Header="Options" Margin="10,10,10,10">
         <Grid Name="OptionsGrid">
           <StackPanel Name="TimestampRenameOptionsStackPanel" Visibility="Collapsed">
@@ -29,12 +30,15 @@
             <CheckBox Name="AddNewToQueueCheckBox" Content="Add new to queue" Margin="10,10,10,0" IsChecked="{Binding SequentialCopyPaste.AddNewClipboardEntriesToQueue, ElementName=Window, Mode=OneWayToSource}" Checked="AddNewToQueueCheckBox_CheckChanged" Unchecked="AddNewToQueueCheckBox_CheckChanged"/>
             <CheckBox Name="CountPrefixCheckbox" Content="Count prefix" Margin="10,10,10,0" IsChecked="{Binding SequentialCopyPaste.CountPrefix, ElementName=Window, Mode=OneWayToSource}" Checked="CountPrefixCheckBox_CheckChanged" Unchecked="CountPrefixCheckBox_CheckChanged"/>
           </StackPanel>
+          <StackPanel Name="MadForFattigroeveOptionsStackPanel" Visibility="Collapsed">
+            <Button Name="MadForFattigroeveStartButton" Content="Start" Margin="10,10,10,10" Click="MadForFattigroeveStartButton_Click"/>
+            <Button Name="MadForFattigroeveSortingButton" Content="Sorting"  Margin="10,10,10,10" Click="MadForFattigroeveSortingButton_Click"></Button>
+          </StackPanel>
         </Grid>
       </GroupBox>
 
     </DockPanel>
-    <DataGrid x:Name="LogDataGrid" Margin="182,10,10,10" HeadersVisibility="None" ItemsSource="{Binding Logger.Entries, ElementName=Window, Mode=OneWay}" GridLinesVisibility="None" AlternationCount="2" AlternatingRowBackground="AliceBlue"/>
-
+    <DataGrid x:Name="LogDataGrid" Margin="182,10,10,10" HeadersVisibility="None" ItemsSource="{Binding Logger.Entries, ElementName=Window, Mode=OneWay}" GridLinesVisibility="None" AlternationCount="2" AlternatingRowBackground="AliceBlue" ScrollViewer.CanContentScroll="False"/>
   </Grid>
 </Window>
 

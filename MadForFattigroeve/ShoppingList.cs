@@ -1,11 +1,19 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Windows;
+using ExtendedClipboard;
 using HtmlAgilityPack;
+using Logging;
 
 namespace MadForFattigroeve
 {
   public class ShoppingList
   {
+    private readonly ILogger _logger;
+
+    public ShoppingList(ILogger logger) => _logger = logger;
+
     private static HtmlWeb HtmlWeb => new HtmlWeb();
 
     private string NewestWeekPlanLink
@@ -24,6 +32,21 @@ namespace MadForFattigroeve
                 .Single(t => t.HasClass("shoppinglist")) // Table with shopping list
                 .Descendants("li")                       // List elements
                 .Select(li => li.InnerText               // Shopping list entry
-                                .TrimEnd(' ', '\r'));         // Trimmed
+                                .TrimEnd(' ', '\r'));    // Trimmed
+
+    public void SetSequentialClipboard() => SetSequentialClipboard(NewestShoppingList);
+
+    public void SetSequentialClipboard(string weekPlanLink) => SetSequentialClipboard(GetShoppingList(weekPlanLink));
+
+    public void SetSequentialClipboard(IEnumerable<string> shoppingList)
+    {
+      var sequentialCopyPaste = SequentialCopyPaste.GetInstance(_logger);
+      sequentialCopyPaste.CountPrefix = true;
+      sequentialCopyPaste.AddNewClipboardEntriesToQueue = false;
+      sequentialCopyPaste.StopWhenEmpty = true;
+      do sequentialCopyPaste.Toggle();
+      while(!sequentialCopyPaste.Active);
+      Clipboard.SetText(string.Join(Environment.NewLine, shoppingList));
+    }
   }
 }

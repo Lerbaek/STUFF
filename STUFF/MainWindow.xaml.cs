@@ -8,9 +8,12 @@ using System.Windows;
 using System.Windows.Controls;
 using ExtendedClipboard;
 using Logging;
+using MadForFattigroeve;
 using MediaStamp;
 using Microsoft.Win32;
+using static System.Windows.Visibility;
 using static Logging.Severity;
+using static STUFF.MainWindow.StartButtonStates;
 
 namespace STUFF
 {
@@ -24,6 +27,12 @@ namespace STUFF
     public IEnumerable<StackPanel> OptionsStackPanels => OptionsGrid.Children.OfType<StackPanel>();
     public SequentialCopyPaste SequentialCopyPaste { get; }
     public TimestampRename TimestampRename { get; }
+
+    public enum StartButtonStates
+    {
+      Start,
+      Stop
+    }
 
     public MainWindow()
     {
@@ -49,14 +58,14 @@ namespace STUFF
     {
       foreach (var button in Buttons)
         button.IsEnabled = state;
-      startButton.Content = state ? "Start" : "Stop";
+      startButton.Content = state ? Start : Stop;
     }
 
     private void ShowOptions(StackPanel optionsStackPanel)
     {
       foreach (var stackPanel in OptionsStackPanels.Where(b => !ReferenceEquals(b, optionsStackPanel)))
-        stackPanel.Visibility = Visibility.Collapsed;
-      optionsStackPanel.Visibility = Visibility.Visible;
+        stackPanel.Visibility = Collapsed;
+      optionsStackPanel.Visibility = Visible;
     }
 
     private void TimestampRenameStartButton_Click(object sender, RoutedEventArgs e)
@@ -92,5 +101,34 @@ namespace STUFF
     private void CountPrefixCheckBox_CheckChanged(object sender, RoutedEventArgs e)
       => Logger.Log(Info,
         $"New clipboard entries will {(CountPrefixCheckbox.IsChecked.Value ? "" : "not ")}be prefixed with an incrementing number");
+
+    private void MadForFattigroeveButton_Click(object sender, RoutedEventArgs e) =>
+      ShowOptions(MadForFattigroeveOptionsStackPanel);
+
+    private void MadForFattigroeveStartButton_Click(object sender, RoutedEventArgs e)
+    {
+      var button = (Button) sender;
+      if (button.Content is StartButtonStates state && state == Stop)
+      {
+        do    { SequentialCopyPaste.Toggle();}
+        while ( SequentialCopyPaste.Active );
+        return;
+      }
+      ShoppingList shoppingList = new ShoppingList(Logger);
+      shoppingList.SetSequentialClipboard();
+      SetButtonStates(false, button);
+
+      SequentialCopyPaste.PropertyChanged += (o, args) =>
+      {
+        var scp = (SequentialCopyPaste) o;
+        if (scp.Active == false)
+          SetButtonStates(true, button);
+      };
+    }
+
+    private void MadForFattigroeveSortingButton_Click(object sender, RoutedEventArgs e)
+    {
+      throw new NotImplementedException();
+    }
   }
 }

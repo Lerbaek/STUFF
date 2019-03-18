@@ -119,6 +119,10 @@
       <Project>{ab3bc88d-8811-48e2-9d39-1d6c66c6d6f4}</Project>
       <Name>Logging</Name>
     </ProjectReference>
+    <ProjectReference Include="..\MadForFattigroeve\MadForFattigroeve.csproj">
+      <Project>{BA822D43-C8E1-42E5-A719-AFC2F04F81BF}</Project>
+      <Name>MadForFattigroeve</Name>
+    </ProjectReference>
     <ProjectReference Include="..\MediaStamp\MediaStamp.csproj">
       <Project>{A02F7CEF-9008-4CC7-AB4E-F7597AAEF82F}</Project>
       <Name>MediaStamp</Name>
