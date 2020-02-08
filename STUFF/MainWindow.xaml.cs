@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
-using System.ComponentModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -11,6 +9,7 @@ using Logging;
 using MadForFattigroeve;
 using MediaStamp;
 using Microsoft.Win32;
+using STUFF.MadForFattigroeve;
 using static System.Windows.Visibility;
 using static Logging.Severity;
 using static STUFF.MainWindow.StartButtonStates;
@@ -128,7 +127,7 @@ namespace STUFF
 
     private void MadForFattigroeveSortingButton_Click(object sender, RoutedEventArgs e)
     {
-      throw new NotImplementedException();
+      new GrocerySortingWindow().ShowDialog();
     }
   }
 }

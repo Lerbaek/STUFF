@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.Diagnostics.CodeAnalysis;
 using Logging;
 using NUnit.Framework;
 using Rhino.Mocks;
@@ -12,19 +7,20 @@ namespace MadForFattigroeve.Test
 {
   public class ShoppingListTests
   {
-    private ShoppingList _uut;
-    private ILogger _logger;
+    private ShoppingList uut;
+    private ILogger logger;
 
     [SetUp]
     public void Setup()
     {
-      _uut = new ShoppingList(_logger);
-      _logger = MockRepository.GenerateMock<ILogger>();
+      uut = new ShoppingList(logger);
+      logger = MockRepository.GenerateMock<ILogger>();
     }
 
     [Test]
+    [SuppressMessage("ReSharper", "StringLiteralTypo")]
     public void GetShoppingList_Week11Year2019_ListIsAsExpected() => Assert.That(
-      _uut.GetShoppingList("https://madforfattigroeve.dk/2019/03/2019-madplan-for-uge-11/"),
+      uut.GetShoppingList("https://madforfattigroeve.dk/2019/03/2019-madplan-for-uge-11/"),
       Is.EquivalentTo(new[]
       {
         "1 kg. gulerødder = 6,50 kr.",
@@ -68,13 +64,6 @@ namespace MadForFattigroeve.Test
       }));
 
     [Test]
-    public void NewestShoppingList_NotEmpty() => Assert.That(_uut.NewestShoppingList, Is.Not.Empty);
-
-    //[Test]
-    //public void NewestShoppingList_NotEmpty()
-    //{
-    //  _uut.SetSequentialClipboard();
-    //  Assert.That(Clipboard.T, Is.Not.Empty);
-    //}
+    public void NewestShoppingList_NotEmpty() => Assert.That(uut.NewestShoppingList, Is.Not.Empty);
   }
 }

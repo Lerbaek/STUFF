@@ -1,11 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using Gma.System.MouseKeyHook;
 using Logging;
@@ -13,6 +10,7 @@ using Logging.Annotations;
 using WK.Libraries.SharpClipboardNS;
 using static System.Environment;
 using static System.StringSplitOptions;
+using static System.Windows.Forms.Clipboard;
 using static Logging.Severity;
 using static WK.Libraries.SharpClipboardNS.SharpClipboard;
 
@@ -20,62 +18,92 @@ namespace ExtendedClipboard
 {
   public class SequentialCopyPaste
   {
-    private static SequentialCopyPaste _instance;
+    #region Fields
 
-    private readonly ILogger _logger;
-    private SharpClipboard _clipboard;
-    private IKeyboardMouseEvents _keyboardHook;
-    private  Queue<string> _cache;
+    private bool active;
+
+    #endregion
+
+    #region Properties
 
     public bool Active
     {
-      get => _active;
+      get => active;
       private set
       {
-        if (value == _active) return;
-        _active = value;
+        if (value == active) return;
+        active = value;
         OnPropertyChanged();
       }
     }
 
     public bool AddNewClipboardEntriesToQueue { private get; set; }
-
     public bool CountPrefix { private get; set; }
     public bool StopWhenEmpty { private get; set; }
 
-    private int _count = 0;
-    private bool _active;
+    private int Count { get; set; }
+    private IKeyboardMouseEvents KeyboardHook { get; set; }
+    private ILogger Logger { get; }
+    private Queue<string> Cache { get; set; }
+    private SharpClipboard Clipboard { get; set; }
+
+    private static SequentialCopyPaste Instance { get; set; }
+
+
+    #endregion
 
     private SequentialCopyPaste(ILogger logger)
     {
-      _logger = logger;
+      Logger = logger;
       AddNewClipboardEntriesToQueue = true;
-      CountPrefix = true;
     }
 
-    public static SequentialCopyPaste GetInstance(ILogger logger) => _instance ?? (_instance = new SequentialCopyPaste(logger));
+    public static SequentialCopyPaste GetInstance(ILogger logger) => Instance ?? (Instance = new SequentialCopyPaste(logger));
 
-    private void   RegisterClipboardChanged() => _clipboard.ClipboardChanged += ClipboardChanged;
-
-    private void UnregisterClipboardChanged() => _clipboard.ClipboardChanged -= ClipboardChanged;
+    private void RegisterClipboardChanged()   => Clipboard.ClipboardChanged += ClipboardChanged;
+    private void UnregisterClipboardChanged() => Clipboard.ClipboardChanged -= ClipboardChanged;
 
     public bool Toggle()
     {
-      _logger.Log(Info, $"{(Active ? "Dea" : "A")}ctivating sequential copy paste...");
+      // ReSharper disable once StringLiteralTypo
+      Logger.Log(Info, $"{(Active ? "Dea" : "A")}ctivating sequential copy paste...");
       return Active ? Stop() : Start();
+    }
+
+    private void PasteEvent()
+    {
+      lock (Cache)
+      {
+        UnregisterClipboardChanged();
+        if (Cache.Any())
+        {
+          ++Count;
+          SetText((CountPrefix ? $"{Count.ToString().PadLeft(2, '0')}: " : string.Empty) + Cache.Dequeue());
+          Logger.Log(Info, $"Clipboard content set to \"{GetText()}\".");
+        }
+        else
+        {
+          Clear();
+          Logger.Log(Info, "Clipboard empty.");
+          if (StopWhenEmpty)
+            Stop();
+        }
+      }
+      RegisterClipboardChanged();
     }
 
     private bool Start()
     {
-      _cache = new Queue<string>();
-      Clipboard.Clear();
-      _clipboard = new SharpClipboard();
+      Cache = new Queue<string>();
+      Clear();
+      Clipboard = new SharpClipboard();
       RegisterClipboardChanged();
 
-      _keyboardHook = Hook.GlobalEvents();
-      _keyboardHook.OnCombination(new []{new KeyValuePair<Combination, Action>(Combination.TriggeredBy(Keys.V).Control(), PasteEvent)});
+      KeyboardHook = Hook.GlobalEvents();
+      KeyboardHook.OnCombination(new[]
+        {new KeyValuePair<Combination, Action>(Combination.TriggeredBy(Keys.V).Control(), PasteEvent)});
 
-      _logger.Log(Info, "Sequential copy paste has been started. Use Ctrl+V to paste.");
+      Logger.Log(Info, "Sequential copy paste has been started. Use Ctrl+V to paste.");
 
       return Active = true;
     }
@@ -84,53 +112,32 @@ namespace ExtendedClipboard
     {
       UnregisterClipboardChanged();
 
-      _clipboard.Dispose();
-      _keyboardHook.Dispose();
+      Clipboard.Dispose();
+      KeyboardHook.Dispose();
 
-      _logger.Log(Info, "Sequential copy paste has been stopped.");
+      Logger.Log(Info, "Sequential copy paste has been stopped.");
 
       return Active = false;
     }
 
-    private void PasteEvent()
-    {
-      lock(_cache)
-      {
-        UnregisterClipboardChanged();
-        if(_cache.Any())
-        {
-          ++_count;
-          Clipboard.SetText((CountPrefix ? $"{_count.ToString().PadLeft(2, '0')}: " : string.Empty) +  _cache.Dequeue());
-          _logger.Log(Info, $"Clipboard content set to \"{Clipboard.GetText()}\".");
-        }
-        else
-        {
-          Clipboard.Clear();
-          _logger.Log(Info, "Clipboard empty.");
-          if (StopWhenEmpty)
-            Stop();
-        }
-      }
-      RegisterClipboardChanged();
-    }
-
     private void ClipboardChanged(object sender, ClipboardChangedEventArgs e)
     {
-      if (e.ContentType != ContentTypes.Text) return;
-      var content = (string) e.Content;
+      if (e.ContentType != ContentTypes.Text)
+        return;
+      var content = (string)e.Content;
       var newEntries = content.Split(new[] { NewLine }, RemoveEmptyEntries);
 
-      if(AddNewClipboardEntriesToQueue)
+      if (AddNewClipboardEntriesToQueue)
         foreach (var line in newEntries)
-          _cache.Enqueue(line);
+          Cache.Enqueue(line);
 
       else
       {
-        _cache = new Queue<string>(newEntries);
-        _count = 0;
+        Cache = new Queue<string>(newEntries);
+        Count = 0;
       }
 
-      _logger.Log(Info, $"Clipboard entries have been {(AddNewClipboardEntriesToQueue ? "added to queue" : "set")}:{NewLine}{(string)e.Content}");
+      Logger.Log(Info, $"Clipboard entries have been {(AddNewClipboardEntriesToQueue ? "added to queue" : "set")}:{NewLine}{content}");
     }
 
     #region Event handler

@@ -10,29 +10,29 @@ namespace MadForFattigroeve
 {
   public class ShoppingList
   {
-    private readonly ILogger _logger;
+    private readonly ILogger logger;
 
-    public ShoppingList(ILogger logger) => _logger = logger;
+    public ShoppingList(ILogger logger) => this.logger = logger;
 
-    private static HtmlWeb HtmlWeb => new HtmlWeb();
+    private static HtmlDocument Load(string url) => new HtmlWeb().Load(url);
 
     private string NewestWeekPlanLink
-      => HtmlWeb.Load("https://madforfattigroeve.dk/category/ugeplaner")
-                .DocumentNode                                        // Document
-                .Descendants("a")                                    // Link elements
-                .First(a => a.InnerText.Contains("Madplan for uge")) // Latest plan link element
-                .GetAttributeValue("href", null);                    // Link
+      => Load("https://madforfattigroeve.dk/category/ugeplaner")
+          .DocumentNode                                        // Document
+          .Descendants("a")                                    // Link elements
+          .First(a => a.InnerText.Contains("Madplan for uge")) // Latest plan link element
+          .GetAttributeValue("href", null);                    // Link
 
     public IEnumerable<string> NewestShoppingList => GetShoppingList(NewestWeekPlanLink);
 
     public IEnumerable<string> GetShoppingList(string weekPlanLink)
-      => HtmlWeb.Load(weekPlanLink)
-                .DocumentNode                            // Document
-                .Descendants("table")                    // Table elements
-                .Single(t => t.HasClass("shoppinglist")) // Table with shopping list
-                .Descendants("li")                       // List elements
-                .Select(li => li.InnerText               // Shopping list entry
-                                .TrimEnd(' ', '\r'));    // Trimmed
+      => Load(weekPlanLink)
+          .DocumentNode                            // Document
+          .Descendants("table")                    // Table elements
+          .Single(t => t.HasClass("shoppinglist")) // Table with shopping list
+          .Descendants("li")                       // List elements
+          .Select(li => li.InnerText               // Shopping list entry
+                          .TrimEnd(' ', '\r'));    // Trimmed
 
     public void SetSequentialClipboard() => SetSequentialClipboard(NewestShoppingList);
 
@@ -40,12 +40,11 @@ namespace MadForFattigroeve
 
     public void SetSequentialClipboard(IEnumerable<string> shoppingList)
     {
-      var sequentialCopyPaste = SequentialCopyPaste.GetInstance(_logger);
-      sequentialCopyPaste.CountPrefix = true;
+      var sequentialCopyPaste = SequentialCopyPaste.GetInstance(logger);
       sequentialCopyPaste.AddNewClipboardEntriesToQueue = false;
       sequentialCopyPaste.StopWhenEmpty = true;
-      do sequentialCopyPaste.Toggle();
-      while(!sequentialCopyPaste.Active);
+      if(!sequentialCopyPaste.Active)
+        sequentialCopyPaste.Toggle();
       Clipboard.SetText(string.Join(Environment.NewLine, shoppingList));
     }
   }

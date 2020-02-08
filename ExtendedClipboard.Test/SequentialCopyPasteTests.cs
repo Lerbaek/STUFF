@@ -1,50 +1,45 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
-using System.Windows;
 using Logging;
 using NUnit.Framework;
 using Rhino.Mocks;
-using WK.Libraries.SharpClipboardNS;
 
 namespace ExtendedClipboard.Test
 {
   [TestFixture]
   public class SequentialCopyPasteTests
   {
-    private ILogger _logger;
-    private SequentialCopyPaste _uut;
+    private ILogger logger;
+    private SequentialCopyPaste uut;
 
     [SetUp]
     public void Setup()
     {
-      _logger = MockRepository.GenerateMock<ILogger>();
-      _uut = SequentialCopyPaste.GetInstance(_logger);
+      logger = MockRepository.GenerateMock<ILogger>();
+      uut = SequentialCopyPaste.GetInstance(logger);
     }
 
     [TearDown]
     public void TearDown()
     {
-      if (_uut.Active) _uut.Toggle();
+      if (uut.Active) uut.Toggle();
     }
 
-    private static IEnumerable<int> _counts = Enumerable.Range(0, 10);
+    private static IEnumerable<int> counts = Enumerable.Range(0, 10);
 
-    [TestCaseSource(nameof(_counts))]
+    [TestCaseSource(nameof(counts))]
     public void Toggle_AnyNumberOfTimes_ActiveIfCountUnequal(int count)
     {
-      RunSTAThread(() =>
+      RunStaThread(() =>
       {
         for (var i = 0; i < count; i++)
-          _uut.Toggle();
+          uut.Toggle();
       });
-      Assert.That(_uut.Active, Is.EqualTo(count % 2 == 1));
+      Assert.That(uut.Active, Is.EqualTo(count % 2 == 1));
     }
 
-    private void RunSTAThread(ThreadStart action)
+    private void RunStaThread(ThreadStart action)
     {
       var thread = new Thread(action);
       thread.SetApartmentState(ApartmentState.STA);

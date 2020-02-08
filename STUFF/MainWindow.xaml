@@ -3,15 +3,11 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:STUFF"
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
-        xmlns:xcad="http://schemas.xceed.com/wpf/xaml/avalondock" x:Name="Window" x:Class="STUFF.MainWindow"
+        x:Name="Window" x:Class="STUFF.MainWindow"
         mc:Ignorable="d"
         Title="Stuff's Toolbox of Utterly Fantastic Functionality" Height="450" Width="800" MinHeight="250" MinWidth="500">
-  <Window.Resources>
-    <xcad:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
-  </Window.Resources>
-  <Grid>
+    <Grid>
     <DockPanel x:Name="ButtonsDockPanel" HorizontalAlignment="Left" Width="182">
       <Button x:Name="SequentialCopyPasteButton" DockPanel.Dock="Top" Content="Sequential Copy Paste" Margin="10,10,10,0" Click="SequentialCopyPasteButton_Click"/>
       <Button x:Name="TimestampRenameButton" DockPanel.Dock="Top" Content="Timestamp Rename" Margin="10,10,10,0" Click="TimestampRenameButton_Click"/>
