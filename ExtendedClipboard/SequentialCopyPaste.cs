@@ -5,16 +5,16 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows.Forms;
 using Gma.System.MouseKeyHook;
-using Logging;
-using Logging.Annotations;
+using STUFF.Logging;
+using STUFF.Logging.Properties;
 using WK.Libraries.SharpClipboardNS;
 using static System.Environment;
 using static System.StringSplitOptions;
 using static System.Windows.Forms.Clipboard;
-using static Logging.Severity;
+using static STUFF.Logging.Severity;
 using static WK.Libraries.SharpClipboardNS.SharpClipboard;
 
-namespace ExtendedClipboard
+namespace STUFF.ExtendedClipboard
 {
   public class SequentialCopyPaste
   {

@@ -1,40 +1,28 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
-using Logging;
-using MadForFattigroeve;
+using static STUFF.UI.MadForFattigroeve.GrocerySortingLogic;
 
-namespace STUFF.MadForFattigroeve
+namespace STUFF.UI.MadForFattigroeve
 {
   /// <summary>
   /// Interaction logic for GrocerySortingWindow.xaml
   /// </summary>
-  public partial class GrocerySortingWindow : Window
+  public partial class GrocerySortingWindow
   {
+    public GrocerySortingLogic GrocerySortingLogic { get; }
+
     private const string DragSource = "DragSource";
-    public ObservableCollection<string> UnsortedGroceries { get; }
-    public ObservableCollection<string> SortedGroceries { get; }
 
     public GrocerySortingWindow()
     {
-      SortedGroceries = new ObservableCollection<string>();
-      UnsortedGroceries = new ObservableCollection<string>(
-        new ShoppingList(new WPFLogger()).NewestShoppingList
-                                         .Select(g => g.Split(new[] {" = "}, StringSplitOptions.RemoveEmptyEntries).First())
-                                         .Where (g => !SortedGroceries.Contains(g)));
+      GrocerySortingLogic = Instance;
       InitializeComponent();
     }
+
+    #region Event handlers
 
     private void GroceryListViewItem_MouseMove(object sender, MouseEventArgs e)
     {
@@ -59,9 +47,17 @@ namespace STUFF.MadForFattigroeve
       var source = (ObservableCollection<string>) e.Data.GetData(DragSource);
       var target = (ObservableCollection<string>) listView.ItemsSource;
       var index = target.IndexOf(listViewItem.Content as string);
-      source.Remove(data);
-      target.Insert(index, data);
+      // ReSharper disable once PossibleNullReferenceException
+      if (source != target)
+      {
+        source.Remove(data);
+        target.Insert(index, data);
+      }
+      else
+        source.Move(source.IndexOf(data), index);
+
       listView.SelectedIndex = index;
+      // ReSharper disable once AssignNullToNotNullAttribute
       listView.ScrollIntoView(data);
       e.Data.SetData(DragSource, target);
     }
@@ -81,7 +77,7 @@ namespace STUFF.MadForFattigroeve
       }
 
       listView.UpdateLayout();
-      var scrollViewer = FindVisualChild<ScrollViewer>(listView);
+      var scrollViewer = listView.FindVisualChild<ScrollViewer>();
 
       const double tolerance = 10;
       const double offset = 1;
@@ -94,23 +90,46 @@ namespace STUFF.MadForFattigroeve
         scrollViewer.ScrollToVerticalOffset(scrollViewer.VerticalOffset + offset); // Scroll down.    
     }
 
-    public static TChildItem FindVisualChild<TChildItem>(DependencyObject obj) where TChildItem : DependencyObject
+    private void GroceryListView_KeyDown(object sender, KeyEventArgs e)
     {
-      // Search immediate children first (breadth-first)
-      for (var i = 0; i < VisualTreeHelper.GetChildrenCount(obj); i++)
+      var listView = (ListView)sender;
+      var index = listView.SelectedIndex;
+      if (e.Key == Key.Delete && index >= 0)
       {
-        var child = VisualTreeHelper.GetChild(obj, i);
-
-        if (child is TChildItem item)
-          return item;
-
-        var childOfChild = FindVisualChild<TChildItem>(child);
-
-        if (childOfChild != null)
-          return childOfChild;
+        var content = (string)listView.SelectedItem;
+        GrocerySortingLogic.SortedGroceries.Remove(content);
+        SortedGroceryListView.SelectedIndex = GrocerySortingLogic.SortedGroceries.Count > index ? index : --index;
       }
-
-      return null;
     }
+
+    private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+    {
+      if (!GrocerySortingLogic.CanSave) return;
+      var result = MessageBox.Show("Would you like to save changes?", "Save changes?", MessageBoxButton.YesNoCancel, MessageBoxImage.Question, MessageBoxResult.Yes);
+      switch (result)
+      {
+        case MessageBoxResult.Yes:
+          GrocerySortingLogic.Save();
+          break;
+        case MessageBoxResult.No:
+          GrocerySortingLogic.LoadGroceries();
+          break;
+        case MessageBoxResult.Cancel:
+          e.Cancel = true;
+          break;
+      }
+    }
+
+    #endregion
+
+    #region Command bindings
+
+    private void CommandBinding_OnSave(object sender, ExecutedRoutedEventArgs e) => GrocerySortingLogic.Save();
+
+    private void CommandBinding_OnCanSave(object sender, CanExecuteRoutedEventArgs e) => e.CanExecute = GrocerySortingLogic.CanSave;
+
+    private void CommandBinding_OnClose(object sender, ExecutedRoutedEventArgs e) => Close();
+
+    #endregion
   }
 }

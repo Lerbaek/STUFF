@@ -1,6 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 
-namespace Logging
+namespace STUFF.Logging
 {
   public interface ILogger
   {

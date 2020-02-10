@@ -4,35 +4,46 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
-        x:Name="Window" x:Class="STUFF.MainWindow"
+        x:Name="Window" x:Class="STUFF.UI.MainWindow"
         mc:Ignorable="d"
         Title="Stuff's Toolbox of Utterly Fantastic Functionality" Height="450" Width="800" MinHeight="250" MinWidth="500">
-    <Grid>
+  <Window.Resources>
+    <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+  </Window.Resources>
+  <Grid>
     <DockPanel x:Name="ButtonsDockPanel" HorizontalAlignment="Left" Width="182">
       <Button x:Name="SequentialCopyPasteButton" DockPanel.Dock="Top" Content="Sequential Copy Paste" Margin="10,10,10,0" Click="SequentialCopyPasteButton_Click"/>
       <Button x:Name="TimestampRenameButton" DockPanel.Dock="Top" Content="Timestamp Rename" Margin="10,10,10,0" Click="TimestampRenameButton_Click"/>
       <Button x:Name="MadForFattigroeveButton" DockPanel.Dock="Top" Content="Mad For Fattigrøve" Margin="10,10,10,0" Click="MadForFattigroeveButton_Click"/>
       <GroupBox Header="Options" Margin="10,10,10,10">
-        <Grid Name="OptionsGrid">
-          <StackPanel Name="TimestampRenameOptionsStackPanel" Visibility="Collapsed">
-            <Button Name="TimestampRenameStartButton" Content="Start" Margin="10,10,10,10" Click="TimestampRenameStartButton_Click"/>
+        <Grid x:Name="OptionsGrid">
+          <StackPanel x:Name="TimestampRenameOptionsStackPanel" Visibility="Collapsed">
+            <Button x:Name="TimestampRenameStartButton" Content="Start" Margin="10,10,10,10" Click="TimestampRenameStartButton_Click"/>
             <GroupBox Header="Offset" Margin="10,10,10,0">
-              <xctk:TimeSpanUpDown Name="OffsetTimeSpanUpDown" Margin="10,10,10,10" Value="{Binding TimestampRename.Offset, ElementName=Window, Mode=OneWayToSource}"/>
+              <xctk:TimeSpanUpDown x:Name="OffsetTimeSpanUpDown" Margin="10,10,10,10" Value="{Binding TimestampRename.Offset, ElementName=Window, Mode=OneWayToSource}"/>
             </GroupBox>
             <CheckBox Content="Dry run" Margin="10,10,10,0" IsChecked="{Binding TimestampRename.DryRun, ElementName=Window, Mode=OneWayToSource}"/>
           </StackPanel>
-          <StackPanel Name="SequentialCopyPasteOptionsStackPanel" Visibility="Collapsed">
-            <Button Name="SequentialCopyPasteStartButton" Content="Start" Margin="10,10,10,10" Click="SequentialCopyPasteStartButton_Click"/>
-            <CheckBox Name="AddNewToQueueCheckBox" Content="Add new to queue" Margin="10,10,10,0" IsChecked="{Binding SequentialCopyPaste.AddNewClipboardEntriesToQueue, ElementName=Window, Mode=OneWayToSource}" Checked="AddNewToQueueCheckBox_CheckChanged" Unchecked="AddNewToQueueCheckBox_CheckChanged"/>
-            <CheckBox Name="CountPrefixCheckbox" Content="Count prefix" Margin="10,10,10,0" IsChecked="{Binding SequentialCopyPaste.CountPrefix, ElementName=Window, Mode=OneWayToSource}" Checked="CountPrefixCheckBox_CheckChanged" Unchecked="CountPrefixCheckBox_CheckChanged"/>
+          <StackPanel x:Name="SequentialCopyPasteOptionsStackPanel" Visibility="Collapsed">
+            <Button x:Name="SequentialCopyPasteStartButton" Content="Start" Margin="10,10,10,10" Click="SequentialCopyPasteStartButton_Click"/>
+            <CheckBox x:Name="AddNewToQueueCheckBox" Content="Add new to queue" Margin="10,10,10,0" IsChecked="{Binding SequentialCopyPaste.AddNewClipboardEntriesToQueue, ElementName=Window, Mode=OneWayToSource}" Checked="AddNewToQueueCheckBox_CheckChanged" Unchecked="AddNewToQueueCheckBox_CheckChanged"/>
+            <CheckBox x:Name="CountPrefixCheckbox" Content="Count prefix" Margin="10,10,10,0" IsChecked="{Binding SequentialCopyPaste.CountPrefix, ElementName=Window, Mode=OneWayToSource}" Checked="CountPrefixCheckBox_CheckChanged" Unchecked="CountPrefixCheckBox_CheckChanged"/>
           </StackPanel>
-          <StackPanel Name="MadForFattigroeveOptionsStackPanel" Visibility="Collapsed">
-            <Button Name="MadForFattigroeveStartButton" Content="Start" Margin="10,10,10,10" Click="MadForFattigroeveStartButton_Click"/>
-            <Button Name="MadForFattigroeveSortingButton" Content="Sorting"  Margin="10,10,10,10" Click="MadForFattigroeveSortingButton_Click"></Button>
+          <StackPanel x:Name="MadForFattigroeveOptionsStackPanel" Visibility="Collapsed">
+            <Button x:Name="MadForFattigroeveStartButton" Content="Start" Margin="10,10,10,10" Click="MadForFattigroeveStartButton_Click"/>
+            <Button x:Name="MadForFattigroeveSortingButton" Content="Sorting"  Margin="10,10,10,10" Click="MadForFattigroeveSortingButton_Click">
+              <Button.ContentTemplate>
+                <DataTemplate>
+                  <Grid>
+                    <TextBlock Foreground="Red" Margin="0,0,-40,0" HorizontalAlignment="Right" FontWeight="Bold" FontFamily="Wide Latin" Visibility="{Binding GrocerySortingLogic.NewItemsAvailable, Converter={StaticResource BooleanToVisibilityConverter}, ElementName=Window, Mode=OneWay}" ><Run Text="!"/></TextBlock>
+                    <ContentPresenter Content="{Binding Content, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}"/>
+                  </Grid>
+                </DataTemplate>
+              </Button.ContentTemplate>
+            </Button>
           </StackPanel>
         </Grid>
       </GroupBox>
-
     </DockPanel>
     <DataGrid x:Name="LogDataGrid" Margin="182,10,10,10" HeadersVisibility="None" ItemsSource="{Binding Logger.Entries, ElementName=Window, Mode=OneWay}" GridLinesVisibility="None" AlternationCount="2" AlternatingRowBackground="AliceBlue" ScrollViewer.CanContentScroll="False"/>
   </Grid>

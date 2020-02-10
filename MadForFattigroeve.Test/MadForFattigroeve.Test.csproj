@@ -8,7 +8,7 @@
     <ProjectGuid>{E3A4A88D-785B-4A14-B5BC-9A9E992740DD}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>MadForFattigroeve.Test</RootNamespace>
+    <RootNamespace>STUFF.MadForFattigroeve.Test</RootNamespace>
     <AssemblyName>MadForFattigroeve.Test</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>

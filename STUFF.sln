@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29728.190
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "STUFF", "STUFF\STUFF.csproj", "{0FDB3A32-3D20-49DA-A2E3-D8378CBC3DA1}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UI", "STUFF\UI.csproj", "{0FDB3A32-3D20-49DA-A2E3-D8378CBC3DA1}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Logging", "Logging\Logging.csproj", "{AB3BC88D-8811-48E2-9D39-1D6C66C6D6F4}"
 EndProject

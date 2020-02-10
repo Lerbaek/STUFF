@@ -7,7 +7,7 @@
     <ProjectGuid>{B4894DAD-840A-4FEE-A514-9B81C2A9305A}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ExtendedClipboard</RootNamespace>
+    <RootNamespace>STUFF.ExtendedClipboard</RootNamespace>
     <AssemblyName>ExtendedClipboard</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>

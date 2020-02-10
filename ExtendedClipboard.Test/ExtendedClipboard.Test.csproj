@@ -8,7 +8,7 @@
     <ProjectGuid>{5BD61A62-D34B-464F-BC7A-63E6AB51D87F}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ExtendedClipboard.Test</RootNamespace>
+    <RootNamespace>STUFF.ExtendedClipboard.Test</RootNamespace>
     <AssemblyName>ExtendedClipboard.Test</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>

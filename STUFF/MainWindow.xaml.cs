@@ -1,31 +1,33 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
-using ExtendedClipboard;
-using Logging;
-using MadForFattigroeve;
-using MediaStamp;
 using Microsoft.Win32;
+using STUFF.ExtendedClipboard;
+using STUFF.Logging;
 using STUFF.MadForFattigroeve;
+using STUFF.MediaStamp;
+using STUFF.UI.MadForFattigroeve;
 using static System.Windows.Visibility;
-using static Logging.Severity;
-using static STUFF.MainWindow.StartButtonStates;
+using static STUFF.Logging.Severity;
+using static STUFF.UI.MainWindow.StartButtonStates;
 
-namespace STUFF
+namespace STUFF.UI
 {
   /// <summary>
   /// Interaction logic for MainWindow.xaml
   /// </summary>
-  public partial class MainWindow : Window
+  public partial class MainWindow
   {
     public ILogger Logger { get; }
     public IEnumerable<Button> Buttons => ButtonsDockPanel.Children.OfType<Button>();
     public IEnumerable<StackPanel> OptionsStackPanels => OptionsGrid.Children.OfType<StackPanel>();
     public SequentialCopyPaste SequentialCopyPaste { get; }
     public TimestampRename TimestampRename { get; }
+    public ShoppingList ShoppingList { get; }
+    public GrocerySortingWindow GrocerySortingWindow => new GrocerySortingWindow();
+    public GrocerySortingLogic GrocerySortingLogic { get; }
 
     public enum StartButtonStates
     {
@@ -38,6 +40,8 @@ namespace STUFF
       Logger = new WPFLogger();
       SequentialCopyPaste = SequentialCopyPaste.GetInstance(Logger);
       TimestampRename = new TimestampRename(Logger);
+      ShoppingList = new ShoppingList(Logger);
+      GrocerySortingLogic = GrocerySortingLogic.Instance;
       InitializeComponent();
       ((INotifyCollectionChanged) LogDataGrid.Items).CollectionChanged += LogDataGrid_SourceUpdated;
     }
@@ -95,10 +99,12 @@ namespace STUFF
 
     private void AddNewToQueueCheckBox_CheckChanged(object sender, RoutedEventArgs e)
       => Logger.Log(Info,
+        // ReSharper disable once PossibleInvalidOperationException
         $"New clipboard entries will {(AddNewToQueueCheckBox.IsChecked.Value ? "be added to" : "overwrite")} the existing queue");
 
     private void CountPrefixCheckBox_CheckChanged(object sender, RoutedEventArgs e)
       => Logger.Log(Info,
+        // ReSharper disable once PossibleInvalidOperationException
         $"New clipboard entries will {(CountPrefixCheckbox.IsChecked.Value ? "" : "not ")}be prefixed with an incrementing number");
 
     private void MadForFattigroeveButton_Click(object sender, RoutedEventArgs e) =>
@@ -113,8 +119,7 @@ namespace STUFF
         while ( SequentialCopyPaste.Active );
         return;
       }
-      ShoppingList shoppingList = new ShoppingList(Logger);
-      shoppingList.SetSequentialClipboard();
+      ShoppingList.SetSequentialClipboard();
       SetButtonStates(false, button);
 
       SequentialCopyPaste.PropertyChanged += (o, args) =>
@@ -125,9 +130,6 @@ namespace STUFF
       };
     }
 
-    private void MadForFattigroeveSortingButton_Click(object sender, RoutedEventArgs e)
-    {
-      new GrocerySortingWindow().ShowDialog();
-    }
+    private void MadForFattigroeveSortingButton_Click(object sender, RoutedEventArgs e) => GrocerySortingWindow.ShowDialog();
   }
 }

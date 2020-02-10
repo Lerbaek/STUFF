@@ -4,16 +4,16 @@ using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using Logging;
-using Logging.Annotations;
 using MetadataExtractor;
+using STUFF.Logging;
+using STUFF.Logging.Properties;
 using static System.Environment;
 using static System.IO.File;
 using static System.IO.Path;
-using static Logging.Severity;
+using static STUFF.Logging.Severity;
 using Directory = MetadataExtractor.Directory;
 
-namespace MediaStamp
+namespace STUFF.MediaStamp
 {
   public class TimestampRename : INotifyPropertyChanged
   {

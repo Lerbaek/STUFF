@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Logging
+namespace STUFF.Logging
 {
   class LogEntry : ILogEntry
   {

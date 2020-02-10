@@ -7,7 +7,7 @@
     <ProjectGuid>{BA822D43-C8E1-42E5-A719-AFC2F04F81BF}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>MadForFattigroeve</RootNamespace>
+    <RootNamespace>STUFF.MadForFattigroeve</RootNamespace>
     <AssemblyName>MadForFattigroeve</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -46,6 +46,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="GrocerySorting.cs" />
     <Compile Include="ShoppingList.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

@@ -6,7 +6,7 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{0FDB3A32-3D20-49DA-A2E3-D8378CBC3DA1}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <RootNamespace>STUFF</RootNamespace>
+    <RootNamespace>STUFF.UI</RootNamespace>
     <AssemblyName>STUFF</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -78,6 +78,8 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="MadForFattigroeve\GrocerySortingLogic.cs" />
+    <Compile Include="Properties\Annotations.cs" />
     <Compile Include="WPFExtensions.cs" />
     <Page Include="MadForFattigroeve\GrocerySortingWindow.xaml">
       <SubType>Designer</SubType>
@@ -148,5 +150,6 @@
   <ItemGroup>
     <None Include="Resources\Stuff.ico" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

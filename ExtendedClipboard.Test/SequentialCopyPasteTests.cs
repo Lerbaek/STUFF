@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
-using Logging;
 using NUnit.Framework;
 using Rhino.Mocks;
+using STUFF.Logging;
 
-namespace ExtendedClipboard.Test
+namespace STUFF.ExtendedClipboard.Test
 {
   [TestFixture]
   public class SequentialCopyPasteTests
@@ -26,9 +26,9 @@ namespace ExtendedClipboard.Test
       if (uut.Active) uut.Toggle();
     }
 
-    private static IEnumerable<int> counts = Enumerable.Range(0, 10);
+    private static readonly IEnumerable<int> Counts = Enumerable.Range(0, 10);
 
-    [TestCaseSource(nameof(counts))]
+    [TestCaseSource(nameof(Counts))]
     public void Toggle_AnyNumberOfTimes_ActiveIfCountUnequal(int count)
     {
       RunStaThread(() =>

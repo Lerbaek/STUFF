@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 
-namespace Logging
+namespace STUFF.Logging
 {
   [SuppressMessage("ReSharper", "UnusedMember.Global")]
   public enum Severity

@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
-using ExtendedClipboard;
 using HtmlAgilityPack;
-using Logging;
+using STUFF.ExtendedClipboard;
+using STUFF.Logging;
 
-namespace MadForFattigroeve
+namespace STUFF.MadForFattigroeve
 {
   public class ShoppingList
   {
@@ -36,6 +36,7 @@ namespace MadForFattigroeve
 
     public void SetSequentialClipboard() => SetSequentialClipboard(NewestShoppingList);
 
+    // ReSharper disable once UnusedMember.Global
     public void SetSequentialClipboard(string weekPlanLink) => SetSequentialClipboard(GetShoppingList(weekPlanLink));
 
     public void SetSequentialClipboard(IEnumerable<string> shoppingList)
@@ -45,7 +46,7 @@ namespace MadForFattigroeve
       sequentialCopyPaste.StopWhenEmpty = true;
       if(!sequentialCopyPaste.Active)
         sequentialCopyPaste.Toggle();
-      Clipboard.SetText(string.Join(Environment.NewLine, shoppingList));
+      Clipboard.SetText(string.Join(Environment.NewLine, GrocerySorting.SortGroceries(shoppingList)));
     }
   }
 }

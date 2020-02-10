@@ -1,4 +1,4 @@
-﻿namespace Logging
+﻿namespace STUFF.Logging
 {
   public interface ILogEntry
   {

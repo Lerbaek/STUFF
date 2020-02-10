@@ -1,15 +1,18 @@
-﻿<Window x:Name="Window" x:Class="STUFF.MadForFattigroeve.GrocerySortingWindow"
+﻿<Window x:Class="STUFF.UI.MadForFattigroeve.GrocerySortingWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:system="clr-namespace:System;assembly=mscorlib"
-        xmlns:mff="clr-namespace:STUFF.MadForFattigroeve"
+        xmlns:mff="clr-namespace:STUFF.UI.MadForFattigroeve"
         mc:Ignorable="d"
         d:DataContext="{d:DesignInstance Type=mff:GrocerySortingWindow, IsDesignTimeCreatable=True}"
         DataContext="{Binding RelativeSource={RelativeSource Self}}"
-        Title="Grocery Sorting" Height="450" Width="800"
+        Title="Grocery Sorting" Height="450" Width="800" Closing="Window_Closing"
 >
+    <Window.CommandBindings>
+        <CommandBinding Command="Save"  Executed="CommandBinding_OnSave" CanExecute="CommandBinding_OnCanSave"/>
+        <CommandBinding Command="Close" Executed="CommandBinding_OnClose"/>
+    </Window.CommandBindings>
     <DockPanel>
         <Menu DockPanel.Dock="Top">
             <MenuItem Header="Actions">
@@ -25,7 +28,7 @@
             </Grid.ColumnDefinitions>
             <DockPanel Grid.Column="0">
                 <Label Content="Unsorted" DockPanel.Dock="Top" HorizontalAlignment="Center" FontSize="20"/>
-                <ListView Name="UnsortedGroceryListView" Margin="10" SelectionMode="Single" ItemsSource="{Binding UnsortedGroceries}" AllowDrop="True" DragOver="GroceryListView_DragOver">
+                <ListView Name="UnsortedGroceryListView" Margin="10" SelectionMode="Single" ItemsSource="{Binding GrocerySortingLogic.UnsortedGroceries}">
                     <ListView.ItemContainerStyle>
                         <Style TargetType="{x:Type ListViewItem}">
                             <EventSetter Event="MouseMove" Handler="GroceryListViewItem_MouseMove"></EventSetter>
@@ -36,7 +39,7 @@
             </DockPanel>
             <DockPanel Grid.Column="1">
                 <Label Content="Sorted" DockPanel.Dock="Top" HorizontalAlignment="Center" FontSize="20"/>
-                <ListView Name="SortedGroceryListView" Margin="10" SelectionMode="Single" ItemsSource="{Binding SortedGroceries}" AllowDrop="True" DragOver="GroceryListView_DragOver">
+        <ListView Name="SortedGroceryListView" Margin="10" SelectionMode="Single" ItemsSource="{Binding GrocerySortingLogic.SortedGroceries}" AllowDrop="True" KeyDown="GroceryListView_KeyDown" DragOver="GroceryListView_DragOver">
                     <ListView.ItemContainerStyle>
                         <Style TargetType="{x:Type ListViewItem}">
                             <EventSetter Event="MouseMove" Handler="GroceryListViewItem_MouseMove"/>

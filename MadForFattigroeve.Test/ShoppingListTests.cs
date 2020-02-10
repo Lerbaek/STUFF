@@ -1,9 +1,9 @@
 ﻿using System.Diagnostics.CodeAnalysis;
-using Logging;
 using NUnit.Framework;
 using Rhino.Mocks;
+using STUFF.Logging;
 
-namespace MadForFattigroeve.Test
+namespace STUFF.MadForFattigroeve.Test
 {
   public class ShoppingListTests
   {
