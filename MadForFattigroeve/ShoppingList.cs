@@ -44,6 +44,7 @@ namespace STUFF.MadForFattigroeve
       var sequentialCopyPaste = SequentialCopyPaste.GetInstance(logger);
       sequentialCopyPaste.AddNewClipboardEntriesToQueue = false;
       sequentialCopyPaste.StopWhenEmpty = true;
+      sequentialCopyPaste.CountPrefix = true;
       if(!sequentialCopyPaste.Active)
         sequentialCopyPaste.Toggle();
       Clipboard.SetText(string.Join(Environment.NewLine, GrocerySorting.SortGroceries(shoppingList)));

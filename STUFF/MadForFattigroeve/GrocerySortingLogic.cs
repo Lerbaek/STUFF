@@ -10,6 +10,9 @@ using static STUFF.MadForFattigroeve.GrocerySorting;
 
 namespace STUFF.UI.MadForFattigroeve
 {
+  /// <summary>
+  /// Singleton containing the visual logic of GrocerySorting
+  /// </summary>
   public class GrocerySortingLogic : INotifyPropertyChanged
   {
     private bool loading;
