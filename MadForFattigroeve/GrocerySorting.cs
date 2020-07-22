@@ -42,7 +42,7 @@ namespace STUFF.MadForFattigroeve
     {
       groceryName =
         Regex.Replace(
-          Regex.Replace(groceryName.Split(new[] {" = "}, StringSplitOptions.RemoveEmptyEntries).First(),
+          Regex.Replace(groceryName.Split(new[] {"="}, StringSplitOptions.RemoveEmptyEntries).First().Trim(),
             $"^[0-9]* ({string.Join("|", Units)}) ", ""), "^[0-9]* ", "");
       return char.ToUpper(groceryName[0]) + groceryName.Substring(1);
     }
