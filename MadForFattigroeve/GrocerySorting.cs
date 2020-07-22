@@ -15,7 +15,7 @@ namespace STUFF.MadForFattigroeve
     public static readonly string DataFilePath = Path.Combine(DataFolderPath, DataFileName);
     public const string DataFileName = "GrocerySorting.xml";
 
-    private static readonly string[] Units = { "x", @".\.", @"..\." };
+    private static readonly string[] Units = { "x", @".\.", @"..\.", "stk" };
 
     public static XmlSerializer XMLSerializer => new XmlSerializer(typeof(ObservableCollection<string>));
 
@@ -37,7 +37,6 @@ namespace STUFF.MadForFattigroeve
     }
 
     public static IEnumerable<string> GroceriesThisWeek => new ShoppingList(new WPFLogger()).NewestShoppingList.Select(TrimGroceryName);
-
     private static string TrimGroceryName(string groceryName)
     {
       groceryName =
